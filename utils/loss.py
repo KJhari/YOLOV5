@@ -197,7 +197,7 @@ class ComputeLoss:
 
         na, nt = self.na, targets.shape[0]  # number of anchors (na=3), number of targets (nt) in this batch
         tcls, tbox, indices, anch = [], [], [], []
-        gain = torch.ones(7, device=targets.device)  # normalized to gridspace gain [1,1,1,1,1,1,1]
+        gain = torch.ones(7, device=targets.device).long()  # normalized to gridspace gain [1,1,1,1,1,1,1]
 
         #ai is the anchor index (na,nt)
         #torch.arange(na).float().view(na,1)
@@ -285,7 +285,7 @@ class ComputeLoss:
             # Append
             a = t[:, 6].long()  # get anchor indices for each box value=0,1,2, size=nf*3
             #save the image index, anchor indices, grid coordinate (y,x) = 4 elements
-            indices.append((b, a, gj.clamp_(0, gain[3] - 1), gi.clamp_(0, gain[2] - 1)))  # image, anchor, grid indices
+            indices.append((b, a, gj.clamp_(0, gain[3] - 1), gi.clamp_(0, gain[2] - 1))) # image, anchor, grid indices
             
             #get the delta xy relative to the current cell, and width, height
             tbox.append(torch.cat((gxy - gij, gwh), 1))  # box
